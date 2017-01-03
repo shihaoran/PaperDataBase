@@ -133,6 +133,7 @@ class RegistrationForm extends Component{
   handleFocus() {
     this.setState({ focus: true });
     let url="";
+    let pl={};
     if(this.props.type === '1')
       url="getAgencyList/";
     else if(this.props.type === '2')
@@ -142,8 +143,10 @@ class RegistrationForm extends Component{
     let value="";
     if(this.props.type === '2')
       value="-1";
-    console.log(url);
-    fetchhttp(url,value,()=>{},this.fetchOptions);
+    pl.url=url;
+    pl.value={value:value};
+    console.log(pl);
+    this.props.dispatch({type: 'app/fetchOption', payload: pl});
   }
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -157,7 +160,7 @@ class RegistrationForm extends Component{
         offset: 6,
       },
     };
-    const options = this.state.data.map(d => <Option key={d.value}>{d.text}</Option>);
+    const options = this.props.app.Optlist.map(d => <Option key={d.value}>{d.text}</Option>);
     const prefixSelector = getFieldDecorator('prefix', {
       initialValue: '86',
     })(

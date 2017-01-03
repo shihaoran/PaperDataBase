@@ -38,9 +38,9 @@ export async function register(params) {
   })
 }
 
-export async function get(params) {
-  return request('register/', {
-    method: 'get',
-    data:params,
+export async function getOpt(params) {
+  return request(params.url, {
+    method: 'post',
+    data:JSON.stringify(params.value),
   })
 }

@@ -1,4 +1,4 @@
-import {login, userInfo, logout,registerUser,register} from '../services/app'
+import {login, userInfo, logout,registerUser,register,getOpt} from '../services/app'
 import {parse} from 'qs'
 import Cookie from 'js-cookie'
 
@@ -17,6 +17,7 @@ export default {
     isNavbar:document.body.clientWidth<769?true:false,
     regmodal_visible:false,
     reg_type:-1,
+    Optlist:[],
   },
   subscriptions : {
     setup({dispatch}) {
@@ -71,19 +72,30 @@ export default {
     *fetchOption({
       payload
     }, {call, put}) {
-      yield put({type: 'showLoading'})
-      const data = yield call(userInfo, parse(payload))
-      if (data.success) {
-        yield put({
-          type: 'loginSuccess',
-          payload: {
-            user: {
-              name: data.username
-            }
+      const data = yield call(getOpt, payload)
+      if (data) {
+        let ddd=[];
+        data.map((d,i)=>{
+          let a={};
+          if(payload.type === '1')
+          {
+            a.value=d.agency_id;
+            a.key=d.agency_name;
           }
-        })
-      } else {
-        yield put({type: 'hideLoading'})
+          else if(payload.type === '2')
+          {
+            a.value=d.journal_id;
+            a.key=d.journal_name;
+          }
+          else if(payload.type === '4')
+          {
+            a.value=d.publisher_id;
+            a.key=d.publisher_name;
+          }
+          ddd[i]=a;
+        });
+        console.log(JSON.stringify(ddd));
+        yield put({type: 'setOptlist',payload:ddd});
       }
     },
     *queryUser({
@@ -222,6 +234,12 @@ export default {
       return {
         ...state,
         regmodal_visible: false
+      }
+    },
+    setOptlist(state,action) {
+      return {
+        ...state,
+        Optlist: action.payload,
       }
     },
   }
