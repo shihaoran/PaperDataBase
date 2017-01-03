@@ -1,5 +1,5 @@
 const Ajax = require("robe-ajax")
-
+const IP="http://115.28.77.70:8080/";
 /**
  * Requests a URL, returning a promise.
  *
@@ -15,13 +15,12 @@ export default function request(url, options) {
     })
   } else {
     return Ajax.ajax({
-      url: url,
+      url: IP+url,
       method: options.method || 'get',
       data: options.data || {},
-      processData: options.method == 'get'
-        ? true
-        : false,
-      dataType: 'JSON'
+      processData: true,
+      dataType: 'JSON',
+      crossDomain:true,
     }).done((data) => {
       return data
     })

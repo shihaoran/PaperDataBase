@@ -11,17 +11,21 @@ import {classnames} from '../utils'
 import '../components/layout/common.less'
 
 function App({children, location, dispatch, app}) {
-  const {login, loading, loginButtonLoading, user, siderFold, darkTheme, isNavbar} = app
+  const {login, loading, loginButtonLoading, user_name,user_type, siderFold, darkTheme, isNavbar, regmodal_visible,reg_type} = app;
   const loginProps = {
     loading,
     loginButtonLoading,
     onOk(data) {
       dispatch({type: 'app/login', payload: data})
-    }
-  }
+    },
+    dispatch,
+    regmodal_visible,
+    reg_type,
+  };
 
   const headerProps = {
-    user,
+    user_name,
+    user_type,
     siderFold,
     location,
     isNavbar,

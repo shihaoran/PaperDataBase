@@ -1,4 +1,4 @@
-import {login, userInfo, logout} from '../services/app'
+import {login, userInfo, logout,registerUser,register} from '../services/app'
 import {parse} from 'qs'
 import Cookie from 'js-cookie'
 
@@ -7,17 +7,20 @@ export default {
   state : {
     login: false,
     loading: false,
-    user: {
-      name: "吴彦祖"
-    },
+    user_name:"",
+    user_type:"",
+    user_id:"",
+    user_journal_id:"",
     loginButtonLoading: false,
     siderFold:localStorage.getItem("antdAdminSiderFold")==="true"?true:false,
     darkTheme:localStorage.getItem("antdAdminDarkTheme")==="false"?false:true,
     isNavbar:document.body.clientWidth<769?true:false,
+    regmodal_visible:false,
+    reg_type:-1,
   },
   subscriptions : {
     setup({dispatch}) {
-      dispatch({type: 'queryUser'})
+      //dispatch({type: 'queryUser'})
       window.onresize = function(){
         dispatch({type: 'changeNavbar'})
       }
@@ -27,16 +30,60 @@ export default {
     *login({
       payload
     }, {call, put}) {
-      yield put({type: 'showLoginButtonLoading'})
-      const data = yield call(login, parse(payload))
+      yield put({type: 'showLoginButtonLoading'});
+      const data = yield call(login, JSON.stringify(payload));
+      if(data.type=="0")
+      {
+        yield put({type: 'loginSuccess', payload:data });
+      }
+      else
+      {
+        yield put({type: 'loginFail', payload:data });
+      }
+    },
+    *register({
+      payload
+    }, {call, put}) {
+      yield put({type: 'showLoading'});
+      yield put({type: 'hideRegModal'});
+      let send=JSON.stringify(payload);
+      let data={};
+      if(payload.type=='0'||payload.type=='1'||payload.type=='2')
+        data = yield call(registerUser, send);
+      else
+        data = yield call(register, send);
+      console.log("dddd");
+      console.log(data);
+      if(data.type=="0")
+      {
+        yield put({type: 'loginSuccess', payload:data })
+      }
+      else if(data.type=="1")
+      {
+        yield put({type: 'hideLoading'});
+      }
+      else if(data.type=="3")
+      {
+        yield put({type: 'hideLoading'});
+      }
+
+    },
+    *fetchOption({
+      payload
+    }, {call, put}) {
+      yield put({type: 'showLoading'})
+      const data = yield call(userInfo, parse(payload))
       if (data.success) {
-        yield put({type: 'loginSuccess', payload: {
-            data
-          }})
+        yield put({
+          type: 'loginSuccess',
+          payload: {
+            user: {
+              name: data.username
+            }
+          }
+        })
       } else {
-        yield put({type: 'loginFail', payload: {
-            data
-          }})
+        yield put({type: 'hideLoading'})
       }
     },
     *queryUser({
@@ -93,9 +140,15 @@ export default {
   },
   reducers : {
     loginSuccess(state, action) {
+      let j_id="-1";
+      if(action.payload.type=='2')
+        j_id=action.payload.journal_id;
       return {
         ...state,
-        ...action.payload,
+        user_name:action.payload.name,
+        user_id:action.payload.id,
+        user_type:action.payload.user_type,
+        user_journal_id:j_id,
         login: true,
         loginButtonLoading: false
       }
@@ -156,6 +209,20 @@ export default {
         ...state,
         isNavbar: false
       }
-    }
+    },
+    showRegModal(state,action) {
+      console.log(action.payload);
+      return {
+        ...state,
+        regmodal_visible: true,
+        reg_type:action.payload,
+      }
+    },
+    hideRegModal(state) {
+      return {
+        ...state,
+        regmodal_visible: false
+      }
+    },
   }
 }
