@@ -22,13 +22,29 @@ module.exports = [
     ]
   },
   {
-    key: 'navigation',
-    name: '测试导航',
-    icon: 'setting',
+    key: 'search',
+    name: '搜索',
+    icon: 'search',
     child: [
       {
-        key: 'navigation1',
-        name: '二级导航1',
+        key: 'paper',
+        name: '论文搜索',
+      },
+      {
+        key: 'author',
+        name: '作者搜索',
+      },
+      {
+        key: 'agency',
+        name: '科研机构搜索',
+      },
+      {
+        key: 'journal',
+        name: '学术期刊搜索',
+      },
+      {
+        key: 'publisher',
+        name: '出版社搜索',
       },
       {
         key: 'navigation2',

@@ -39,6 +39,46 @@ export default function ({history, app}) {
             })
           }
         }, {
+          path: 'search/paper',
+          name: 'paper',
+          getComponent(nextState, cb) {
+            require.ensure([], require => {
+              cb(null, require('./routes/searchpaper'))
+            })
+          }
+        },{
+          path: 'search/author',
+          name: 'author',
+          getComponent(nextState, cb) {
+            require.ensure([], require => {
+              cb(null, require('./routes/searchauthor'))
+            })
+          }
+        },{
+          path: 'search/agency',
+          name: 'agency',
+          getComponent(nextState, cb) {
+            require.ensure([], require => {
+              cb(null, require('./routes/searchagency'))
+            })
+          }
+        },{
+          path: 'search/journal',
+          name: 'journal',
+          getComponent(nextState, cb) {
+            require.ensure([], require => {
+              cb(null, require('./routes/searchjournal'))
+            })
+          }
+        },{
+          path: 'search/publisher',
+          name: 'publisher',
+          getComponent(nextState, cb) {
+            require.ensure([], require => {
+              cb(null, require('./routes/searchpublisher'))
+            })
+          }
+        },{
           path: '*',
           name: 'error',
           getComponent(nextState, cb) {
