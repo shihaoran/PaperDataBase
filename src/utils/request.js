@@ -14,6 +14,8 @@ export default function request(url, options) {
       format: "json"
     })
   } else {
+    console.log(IP+url);
+    console.log(options.data);
     return Ajax.ajax({
       url: IP+url,
       method: options.method || 'get',

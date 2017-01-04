@@ -8,6 +8,28 @@ module.exports = [
     key: 'users',
     name: '用户管理',
     icon: 'user',
+    child:[
+      {
+        key: 'examine',
+        name: '审核论文',
+      },
+      {
+        key: 'papers',
+        name: '发表论文',
+      },
+      {
+        key: 'salary',
+        name: '调整工资',
+      },
+      {
+        key: 'authors',
+        name: '查看作者',
+      },
+      {
+        key: 'journals',
+        name: '查看期刊',
+      },
+    ]
   },
   {
     key: 'ui',
@@ -45,20 +67,6 @@ module.exports = [
       {
         key: 'publisher',
         name: '出版社搜索',
-      },
-      {
-        key: 'navigation2',
-        name: '二级导航2',
-        child: [
-          {
-            key: 'navigation21',
-            name: '三级导航1',
-          },
-          {
-            key: 'navigation22',
-            name: '三级导航2',
-          },
-        ],
       },
     ],
   },

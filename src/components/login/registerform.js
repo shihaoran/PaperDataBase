@@ -51,7 +51,7 @@ class RegistrationForm extends Component{
         if(this.props.type === '1')
         {
           result.author_name=values.nickname;
-          result.author_sex=values.isMale;
+          result.author_sex=(values.isMale?"M":"F");
           result.author_email=values.email;
           result.author_birth=values.birth;
           result.author_agency_id=values.place_id;

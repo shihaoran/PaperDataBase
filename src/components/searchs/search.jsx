@@ -16,7 +16,6 @@ const search = ({
       if (!!errors) {
         return
       }
-      console.log(getFieldsValue());
       onSearch(getFieldsValue())
     })
   }

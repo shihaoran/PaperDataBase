@@ -41,6 +41,7 @@ function App({children, location, dispatch, app}) {
     siderFold,
     darkTheme,
     location,
+    user_type,
     changeTheme(){
       dispatch({type: 'app/changeTheme'})
     }

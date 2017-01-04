@@ -28,7 +28,7 @@ const getMenus = function (menuArray,siderFold,parentPath) {
   })
 }
 
-function Menus({ siderFold,darkTheme,location,isNavbar }) {
+function Menus({ siderFold,darkTheme,location,isNavbar,user_type }) {
   const menuItems = getMenus(menu,siderFold)
   return (
   <Menu

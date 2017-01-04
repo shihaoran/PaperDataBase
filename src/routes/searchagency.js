@@ -1,26 +1,23 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'dva'
-import {Link} from 'dva/router'
-import {Row, Col, Icon, Card,Button,Form} from 'antd'
 import UserSearch from '../components/searchs/search'
-import UserList from '../components/searchs/list'
-import {color} from '../utils'
+import UserList from '../components/searchs/agencylist'
 
 
 function SearchAgency({search,dispatch}) {
   const {
-    loading, list, modalVisible, modalType,
+    loading, agencylist, modalVisible, modalType,
   } = search;
 
   const userListProps = {
-    dataSource: list,
+    dataSource: agencylist,
     loading,
   };
 
   const userSearchProps = {
     onSearch(fieldsValue) {
       dispatch({
-        type: 'search/query',
+        type: 'search/queryAgency',
         payload: fieldsValue,
       })
     },
