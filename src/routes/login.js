@@ -17,6 +17,7 @@ import {
 import {config} from '../utils'
 import styles from './login.less'
 import RegistrationForm from '../components/login/registerform'
+import RegModal from '../components/login/regmodal'
 
 const FormItem = Form.Item
 
@@ -31,6 +32,7 @@ const login = ({
   dispatch,
   regmodal_visible,
   reg_type,
+  Optlist,
 }) => {
 
   function handleOk() {
@@ -71,7 +73,7 @@ const login = ({
              footer={[
                <Button key="back" type="ghost" size="large" onClick={CloseModal}>返回</Button>,
              ]}>
-        <RegistrationForm type={reg_type} dispatch={dispatch}/>
+        <RegistrationForm type={reg_type} dispatch={dispatch} optlist={Optlist}/>
       </Modal>
     </Spin>
 
@@ -121,7 +123,7 @@ const login = ({
           <span>密码：guest</span>
         </p>
       </form>
-      {Common_reg}
+      <RegModal/>
     </div>
   )
 }

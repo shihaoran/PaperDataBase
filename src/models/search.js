@@ -11,6 +11,9 @@ import { create,
   getJournal,
   getField,
   addPaper,
+  setSalary,
+  examinePaper,
+  getDataBaseInfo,
 } from '../services/search'
 import { parse } from 'qs'
 
@@ -31,6 +34,7 @@ export default {
     _editorlist:[],
     _fieldlist:[],
     loading: false,
+    dashboard:{},
     currentItem: {},
     modalVisible: false,
     modalType: 'create',
@@ -64,6 +68,11 @@ export default {
             type: 'getJournal',
           })
         }
+        else if (location.pathname === '/dashboard') {
+          dispatch({
+            type: 'getDataBaseInfo',
+          })
+        }
         dispatch({
           type: 'copyUserid',
         })
@@ -72,6 +81,20 @@ export default {
   },
 
   effects: {
+    *getDataBaseInfo({ payload }, { call, put, select}) {
+      yield put({ type: 'showLoading' });
+      const data = yield call(getDataBaseInfo, "");
+      console.log(data);
+      if (data) {
+        yield put({
+          type: 'setDataBaseInfo',
+          payload:data,
+        })
+      }
+      yield put({
+        type: 'hideLoading',
+      })
+    },
     *copyUserid({ payload }, { call, put, select}) {
       const app = yield select(state => state.app);
       yield put({ type: 'setUserid' ,payload:app.user_id});
@@ -80,11 +103,35 @@ export default {
       yield put({ type: 'showLoading' });
       const data = yield call(addPaper, JSON.stringify(payload));
       if (data) {
-        dispatch({
+        yield put({
           type: 'getexaminePaper',
         })
       }
-      dispatch({
+      yield put({
+        type: 'hideLoading',
+      })
+    },
+    *setSalary({ payload }, { call, put, select}) {
+      yield put({ type: 'showLoading' });
+      const data = yield call(setSalary, JSON.stringify(payload));
+      if (data) {
+        yield put({
+          type: 'getEditor',
+        });
+      }
+      yield put({
+        type: 'hideLoading',
+      })
+    },
+    *examinePaper({ payload }, { call, put, select}) {
+      yield put({ type: 'showLoading' });
+      const data = yield call(examinePaper, JSON.stringify(payload));
+      if (data) {
+        yield put({
+          type: 'getexaminePaper',
+        });
+      }
+      yield put({
         type: 'hideLoading',
       })
     },
@@ -298,6 +345,12 @@ export default {
     },
     hideModal(state) {
       return { ...state, modalVisible: false }
+    },
+    setCurItem(state,action){
+      return { ...state, currentItem: action.payload }
+    },
+    setDataBaseInfo(state,action){
+      return { ...state, dashboard: action.payload }
     },
   },
 

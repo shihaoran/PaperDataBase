@@ -14,6 +14,12 @@ function Header({user_name,user_type, logout, switchSider, siderFold, isNavbar ,
     isNavbar,
     location
   }
+  function onMenu(item, key, keyPath) {
+    if(item.key==="logout")
+    {
+      logout();
+    }
+  }
   return (
     <div className={styles.header}>
       {isNavbar
@@ -26,7 +32,7 @@ function Header({user_name,user_type, logout, switchSider, siderFold, isNavbar ,
           <Icon type={siderFold? 'menu-unfold': 'menu-fold'}/>
         </div>}
 
-      <Menu className="header-menu" mode="horizontal" >
+      <Menu className="header-menu" mode="horizontal" onClick={onMenu}>
         <SubMenu style={{
           float: 'right'
         }} title={< span > <Icon type="user"/>
@@ -38,7 +44,7 @@ function Header({user_name,user_type, logout, switchSider, siderFold, isNavbar ,
                   user_type==="3"?"科研机构用户":
                     user_type==="4"?"期刊用户":"出版社用户"}
           </Menu.Item>
-          <Menu.Item key="logout" onClick={handleClickMenu}>
+          <Menu.Item key="logout" >
             <a>注销</a>
           </Menu.Item>
         </SubMenu>

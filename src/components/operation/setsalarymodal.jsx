@@ -22,7 +22,7 @@ const modal = ({
   },
 }) => {
   const {
-    _journallist, _fieldlist, user_id, modalVisible, modalType,
+    user_id, modalVisible, modalType, currentItem,
   } = search;
 
   function handleOk() {
@@ -32,11 +32,15 @@ const modal = ({
       }
       const data = {
         ...getFieldsValue(),
-        paper_author_id:user_id,
+        editor_id:currentItem.editor_id,
+      };
+      const datastr = {
+        ...data,
+        salary:data.salary.toString(),
       };
       dispatch({
-        type: 'search/addPaper',
-        payload: data,
+        type: 'search/setSalary',
+        payload: datastr,
       });
       dispatch({
         type: 'search/hideModal',
@@ -48,94 +52,31 @@ const modal = ({
       type: 'search/hideModal',
     });
   }
-
-  function handleFocus1() {
-    dispatch({
-      type: 'search/getAllJournal',
-    });
-  }
-
-  function handleFocus2() {
-    dispatch({
-      type: 'search/getAllField',
-    });
-  }
+  const cur_salary=currentItem.editor_salary;
 
   const modalOpts = {
-    title: '发布论文',
+    title: '设置工资',
     visible:modalVisible,
     onOk: handleOk,
     onCancel:handleClose,
     wrapClassName: 'vertical-center-modal',
   };
 
-  const options1= _journallist.map(d => <Option key={d.journal_id}>{d.journal_name}</Option>);
-
-  const options2= _fieldlist.map(d => <Option key={d.field_id}>{d.field_name}</Option>);
 
   return (
     <Modal {...modalOpts}>
       <Form horizontal>
-        <FormItem label="标题：" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('paper_title', {
-            rules: [
-              {
-                required: true,
-                message: '标题未填写',
-              },
-            ],
-          })(<Input />)}
-        </FormItem>
-        <FormItem label="发表年份：" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('paper_published_year', {
+        <FormItem label="请设置新工资：" hasFeedback {...formItemLayout}>
+          {getFieldDecorator('salary', {
+            initialValue: cur_salary,
             rules: [
               {
                 required: true,
                 type: 'number',
-                message: '发表年份未填写',
+                message: '工资未填写',
               },
             ],
-          })(<Input />)}
-        </FormItem>
-        <FormItem label="发表期刊：" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('paper_published_journal_id', {
-            rules: [
-              {
-                required: true,
-                message: '发表期刊未填写',
-              },
-            ],
-          })(
-            <Select placeholder="请选择"
-                    onFocus={handleFocus1}>
-              {options1}
-            </Select>
-          )}
-        </FormItem>
-        <FormItem label="论文领域：" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('paper_field_id', {
-            rules: [
-              {
-                required: true,
-                message: '论文领域未填写',
-              },
-            ],
-          })(
-            <Select placeholder="请选择"
-                    onFocus={handleFocus2}>
-              {options2}
-            </Select>
-          )}
-        </FormItem>
-        <FormItem label="链接：" hasFeedback {...formItemLayout}>
-          {getFieldDecorator('paper_link', {
-            rules: [
-              {
-                required: true,
-                message: '论文链接未填写',
-              },
-            ],
-          })(<Input />)}
+          })(<InputNumber min={2000} max={10000} />)}
         </FormItem>
       </Form>
     </Modal>

@@ -1,55 +1,57 @@
-/**
- * Created by shi on 2017/1/3.
- */
-import {
-  Form,
-  Input,
-  Tooltip,
-  Icon,
-  Cascader,
-  Select,
-  Row,
-  Col,
-  Checkbox,
-  Button,
-  Radio,
-} from 'antd';
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react'
+import { Form, Input, InputNumber, Radio, Modal, Select, Tooltip, Icon, Checkbox} from 'antd'
 import {connect} from 'dva'
-import { fetchhttp } from '../../utils'
+const FormItem = Form.Item
 
-const FormItem = Form.Item;
-const Option = Select.Option;
+const formItemLayout = {
+  labelCol: {
+    span: 6,
+  },
+  wrapperCol: {
+    span: 14,
+  },
+}
 
-class RegistrationForm extends Component{
-  constructor(props) {
-    // 继承父类的this对象和传入的外部属性
-    super(props);
-    // 设置初始状态
-    const {optlist}=props;
-    this.state = {
-      passwordDirty: false,
-      data:[],
-      focus:false,
-    };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handlePasswordBlur = this.handlePasswordBlur.bind(this);
-    this.checkPassword = this.checkPassword.bind(this);
-    this.checkConfirm = this.checkConfirm.bind(this);
-    this.fetchOptions = this.fetchOptions.bind(this);
-    this.handleFocus =this.handleFocus.bind(this);
-    //this.getList = this.getList.bind(this);
+const modal = ({
+  app,
+  dispatch,
+  form: {
+    getFieldDecorator,
+    validateFields,
+    getFieldsValue,
+    validateFieldsAndScroll,
+  },
+}) => {
+  const {
+    reg_type, regmodal_visible, Optlist, passwordDirty, modalVisible, modalType,
+  } = app;
+
+  function handleClose() {
+    dispatch({
+      type: 'app/hideRegModal',
+    });
   }
-  handleSubmit(e) {
-    e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
+
+  function handleFocus() {
+    let url="";
+    if(reg_type === '1')
+      url="getAgencyList/";
+    else if(reg_type === '2')
+      url="getJournalList/";
+    else if(reg_type === '4')
+      url="getPublisherList/";
+    dispatch({type: 'app/fetchOption', payload: url});
+  }
+
+  function handleSubmit(e) {
+    validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
         let result={};
         result.user_name=values.username;
         result.password=values.password;
-        result.type=this.props.type;
-        if(this.props.type === '1')
+        result.type=reg_type;
+        if(reg_type === '1')
         {
           result.author_name=values.nickname;
           result.author_sex=(values.isMale?"M":"F");
@@ -57,19 +59,19 @@ class RegistrationForm extends Component{
           result.author_birth=values.birth;
           result.author_agency_id=values.place_id;
         }
-        else if(this.props.type === '2')
+        else if(reg_type === '2')
         {
           result.editor_name=values.nickname;
           result.edit_journal_id=values.place_id;
         }
-        else if(this.props.type === '3')
+        else if(reg_type === '3')
         {
           result.agency_name=values.nickname;
           result.agency_property =values.type;
           result.agency_address=values.address;
           result.agency_country=values.country;
         }
-        else if(this.props.type === '4')
+        else if(reg_type === '4')
         {
           result.journal_name=values.nickname;
           result.journal_content=values.intro;
@@ -77,99 +79,55 @@ class RegistrationForm extends Component{
           result.journal_publisher_id=values.place_id;
           result.journal_country=values.country;
         }
-        else if(this.props.type === '5')
+        else if(reg_type === '5')
         {
           result.publisher_name=values.nickname;
           result.publisher_country=values.country;
           result.publisher_center=values.address;
         }
         console.log(result);
-        this.props.dispatch({type: 'app/register', payload: result});
+        dispatch({type: 'app/register', payload: result});
       }
     });
   }
-  handlePasswordBlur(e) {
+  function handlePasswordBlur(e) {
     const value = e.target.value;
-    this.setState({ passwordDirty: this.state.passwordDirty || !!value });
+    dispatch({type: 'app/setpasswordDirty', payload: (passwordDirty || !!value)});
   }
-  checkPassword(rule, value, callback) {
-    const form = this.props.form;
-    if (value && value !== form.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!');
-    } else {
-      callback();
-    }
-  }
-  checkConfirm(rule, value, callback) {
-    const form = this.props.form;
-    if (value && this.state.passwordDirty) {
-      form.validateFields(['confirm'], { force: true });
+
+  function checkConfirm(rule, value, callback) {
+    if (value && passwordDirty) {
+      validateFields(['confirm'], { force: true });
     }
     callback();
   }
-  fetchOptions(data){
-    let ddd=[];
-    data.map((d,i)=>{
-      let a={};
-      console.log(d);
-      if(this.props.type === '1')
-      {
-        a.value=d.agency_id;
-        a.key=d.agency_name;
-      }
-      else if(this.props.type === '2')
-      {
-        a.value=d.journal_id;
-        a.key=d.journal_name;
-      }
-      else if(this.props.type === '4')
-      {
-        a.value=d.publisher_id;
-        a.key=d.publisher_name;
-      }
-      ddd[i]=a;
-    });
-    this.setState({data:ddd});
-  }
-  handleFocus() {
-    this.setState({ focus: true });
-    let url="";
-    let pl={};
-    if(this.props.type === '1')
-      url="getAgencyList/";
-    else if(this.props.type === '2')
-      url="getJournalList/";
-    else if(this.props.type === '4')
-      url="getPublisherList/";
-    let value="";
-    if(this.props.type === '2')
-      value="-1";
-    pl.url=url;
-    pl.value={value:value};
-    console.log(pl);
-    this.props.dispatch({type: 'app/fetchOption', payload: pl});
-  }
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    const formItemLayout = {
-      labelCol: { span: 6 },
-      wrapperCol: { span: 14 },
-    };
-    const tailFormItemLayout = {
-      wrapperCol: {
-        span: 14,
-        offset: 6,
-      },
-    };
+  const modalOpts = {
+    title: '注册',
+    visible:regmodal_visible,
+    onOk: handleSubmit,
+    onCancel:handleClose,
+    wrapClassName: 'vertical-center-modal',
+  };
 
-    const list=this.props.Optlist;
-    console.log(list);
-    const options = list.map(d => <Option key={d.value}>{d.text}</Option>);
-
-    return (
-      <Form horizontal onSubmit={this.handleSubmit}>
+  const options= Optlist.map((d) =>{
+    if(reg_type === '1') {
+      return (<Option key={d.agency_id}>{d.agency_name}</Option>);
+    }
+    else if(reg_type === '2')
+    {
+      return (<Option key={d.journal_id}>{d.journal_name}</Option>);
+    }
+    else if(reg_type === '4')
+    {
+      return (<Option key={d.publisher_id}>{d.publisher_name}</Option>);
+    }
+    
+  });
+  
+  return (
+    <Modal {...modalOpts}>
+      <Form horizontal onSubmit={handleSubmit}>
         <FormItem
-          {...formItemLayout}
           label={(
             <span>
               用户名&nbsp;
@@ -189,7 +147,6 @@ class RegistrationForm extends Component{
           )}
         </FormItem>
         <FormItem
-          {...formItemLayout}
           label="密码"
           hasFeedback
         >
@@ -197,30 +154,13 @@ class RegistrationForm extends Component{
             rules: [{
               required: true, message: '请输入密码!',
             }, {
-              validator: this.checkConfirm,
             }],
           })(
-            <Input type="password" onBlur={this.handlePasswordBlur} />
+            <Input type="password" onBlur={handlePasswordBlur} />
           )}
         </FormItem>
         <FormItem
-          {...formItemLayout}
-          label="确认密码"
-          hasFeedback
-        >
-          {getFieldDecorator('confirm', {
-            rules: [{
-              required: true, message: '请再次输入密码!',
-            }, {
-              validator: this.checkPassword,
-            }],
-          })(
-            <Input type="password" />
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={(this.props.type === '0'||this.props.type === '1'||this.props.type === '2')?"真实姓名":"机构名称"}
+          label={(reg_type === '0'||reg_type === '1'||reg_type === '2')?"真实姓名":"机构名称"}
           hasFeedback
         >
           {getFieldDecorator('nickname', {
@@ -229,8 +169,8 @@ class RegistrationForm extends Component{
             <Input />
           )}
         </FormItem>
-        {this.props.type === '1'?
-          <FormItem label="性别" hasFeedback {...formItemLayout}>
+        {reg_type === '1'?
+          <FormItem label="性别" hasFeedback >
             {getFieldDecorator('isMale', {
               initialValue: true,
               rules: [
@@ -249,8 +189,8 @@ class RegistrationForm extends Component{
           </FormItem>
           :<div/>
         }
-        {this.props.type === '1'?
-          <FormItem label="学历" hasFeedback {...formItemLayout}>
+        {reg_type === '1'?
+          <FormItem label="学历" hasFeedback >
             {getFieldDecorator('degree', {
               rules: [
                 {
@@ -271,9 +211,8 @@ class RegistrationForm extends Component{
           </FormItem>
           :<div/>
         }
-        {this.props.type === '1'?
+        {reg_type === '1'?
           <FormItem
-            {...formItemLayout}
             label="email"
             hasFeedback
           >
@@ -289,9 +228,8 @@ class RegistrationForm extends Component{
           </FormItem>
           :<div/>
         }
-        {this.props.type === '1'?
+        {reg_type === '1'?
           <FormItem
-            {...formItemLayout}
             label="出生年份"
             hasFeedback
           >
@@ -305,8 +243,8 @@ class RegistrationForm extends Component{
           </FormItem>
           :<div/>
         }
-        {this.props.type === '4'?
-          <FormItem label="期刊简介" hasFeedback {...formItemLayout}>
+        {reg_type === '4'?
+          <FormItem label="期刊简介" hasFeedback >
             {getFieldDecorator('intro', {
               rules: [
                 {
@@ -320,8 +258,8 @@ class RegistrationForm extends Component{
           </FormItem>
           :<div/>
         }
-        {this.props.type === '4'?
-          <FormItem label="成立时间" hasFeedback {...formItemLayout}>
+        {reg_type === '4'?
+          <FormItem label="成立时间" hasFeedback >
             {getFieldDecorator('foundyear', {
               rules: [
                 {
@@ -335,11 +273,11 @@ class RegistrationForm extends Component{
           </FormItem>
           :<div/>
         }
-        {(this.props.type === '1'||this.props.type === '2'||this.props.type === '4')?
-          <FormItem label={this.props.type === '1'?"隶属研究机构":
-                            this.props.type === '2'?"隶属期刊":"隶属出版社"}
+        {(reg_type === '1'||reg_type === '2'||reg_type === '4')?
+          <FormItem label={reg_type === '1'?"隶属研究机构":
+            reg_type === '2'?"隶属期刊":"隶属出版社"}
                     hasFeedback
-                    {...formItemLayout}>
+                    >
             {getFieldDecorator('place_id', {
               rules: [
                 {
@@ -349,17 +287,17 @@ class RegistrationForm extends Component{
               ],
             })(
               <Select placeholder="请选择"
-                      onFocus={this.handleFocus}>
+                      onFocus={handleFocus}>
                 {options}
               </Select>
             )}
           </FormItem>
           :<div/>
         }
-        {this.props.type === '3'?
+        {reg_type === '3'?
           <FormItem label="机构性质"
                     hasFeedback
-                    {...formItemLayout}>
+                    >
             {getFieldDecorator('type', {
               rules: [
                 {
@@ -377,10 +315,10 @@ class RegistrationForm extends Component{
           </FormItem>
           :<div/>
         }
-        {(this.props.type === '3'||this.props.type === '4'||this.props.type === '5')?
+        {(reg_type === '3'||reg_type === '4'||reg_type === '5')?
           <FormItem label="所在国家"
                     hasFeedback
-                    {...formItemLayout}>
+                    >
             {getFieldDecorator('country', {
               rules: [
                 {
@@ -394,10 +332,10 @@ class RegistrationForm extends Component{
           </FormItem>
           :<div/>
         }
-        {(this.props.type === '3'||this.props.type === '5')?
+        {(reg_type === '3'||reg_type === '5')?
           <FormItem label="地址"
                     hasFeedback
-                    {...formItemLayout}>
+                    >
             {getFieldDecorator('address', {
               rules: [
                 {
@@ -411,7 +349,7 @@ class RegistrationForm extends Component{
           </FormItem>
           :<div/>
         }
-        <FormItem {...tailFormItemLayout} style={{ marginBottom: 8 }}>
+        <FormItem style={{ marginBottom: 8 }}>
           {getFieldDecorator('agreement', {
             valuePropName: 'checked',
             rules: [
@@ -424,12 +362,17 @@ class RegistrationForm extends Component{
             <Checkbox>我已阅读用户协议</Checkbox>
           )}
         </FormItem>
-        <FormItem {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit" size="large" onClick={()=>{}}>Register</Button>
-        </FormItem>
+
       </Form>
-    );
-  }
+    </Modal>
+  )
 }
 
-export default connect(({app}) => ({app}))(Form.create()(RegistrationForm));
+modal.propTypes = {
+  form: PropTypes.object,
+  item: PropTypes.object,
+  onOk: PropTypes.func,
+  onCancel: PropTypes.func,
+}
+
+export default connect(({app}) => ({app}))(Form.create()(modal));

@@ -75,9 +75,23 @@ export async function addPaper(params) {
   })
 }
 
-export async function update(params) {
-  return request('/api/users', {
-    method: 'put',
+export async function setSalary(params) {
+  return request('setSalary/', {
+    method: 'post',
+    data:params,
+  })
+}
+
+export async function examinePaper(params) {
+  return request('examinePaper/', {
+    method: 'post',
+    data:params,
+  })
+}
+
+export async function getDataBaseInfo(params) {
+  return request('getDataBaseInfo/', {
+    method: 'post',
     data: params,
   })
 }

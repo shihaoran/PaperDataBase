@@ -10,7 +10,7 @@ export default function ({history, app}) {
       component: App,
       getIndexRoute(nextState, cb) {
         require.ensure([], require => {
-          cb(null, {component: require('./routes/dashboard')})
+          cb(null, {component: require('./routes/newdashboard')})
         })
       },
       childRoutes: [
@@ -19,7 +19,7 @@ export default function ({history, app}) {
           name: 'dashboard',
           getComponent(nextState, cb) {
             require.ensure([], require => {
-              cb(null, require('./routes/dashboard'))
+              cb(null, require('./routes/newdashboard'))
             })
           }
         }, {

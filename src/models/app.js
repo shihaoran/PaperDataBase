@@ -1,5 +1,6 @@
-import {login, userInfo, logout,registerUser,register,getOpt} from '../services/app'
+import {login, userInfo, logout,registerUser,register,getOpt,getJournal} from '../services/app'
 import {parse} from 'qs'
+import { Button, notification } from 'antd';
 import Cookie from 'js-cookie'
 
 export default {
@@ -18,6 +19,8 @@ export default {
     regmodal_visible:false,
     reg_type:-1,
     Optlist:[],
+    passwordDirty: false,
+
   },
   subscriptions : {
     setup({dispatch}) {
@@ -57,45 +60,58 @@ export default {
       console.log(data);
       if(data.type=="0")
       {
-        yield put({type: 'loginSuccess', payload:data })
+        yield put({type: 'loginSuccess', payload:data });
+        notification['success']({
+          message: '注册成功',
+          description: '注册成功，您可以使用数据库了！',
+        });
       }
       else if(data.type=="1")
       {
         yield put({type: 'hideLoading'});
+        notification['warning']({
+          message: "用户重名",
+          description: '该用户名已经被注册啦！',
+        });
+      }
+      else if(data.type=="1")
+      {
+        yield put({type: 'hideLoading'});
+        notification['warning']({
+          message: "用户重名",
+          description: '该用户名已经被注册啦！',
+        });
       }
       else if(data.type=="3")
       {
         yield put({type: 'hideLoading'});
+        notification['warning']({
+          message: "机构重名",
+          description: '该机构已经被注册啦！',
+        });
+      }
+      else
+      {
+        yield put({type: 'hideLoading'});
+        notification['error']({
+          message: '网络错误',
+          description: '网络开小差啦，请等会重试！',
+        });
       }
 
     },
     *fetchOption({
       payload
-    }, {call, put}) {
-      const data = yield call(getOpt, payload)
+    }, {call, put,select}) {
+      const app = yield select(state => state.app);
+      let data=[];
+      if(app.reg_type=="2")
+        data = yield call(getJournal, {publisher_id:"-1"});
+      else
+        data = yield call(getOpt, payload);
+      console.log(data);
       if (data) {
-        let ddd=[];
-        data.map((d,i)=>{
-          let a={};
-          if(payload.type === '1')
-          {
-            a.value=d.agency_id;
-            a.key=d.agency_name;
-          }
-          else if(payload.type === '2')
-          {
-            a.value=d.journal_id;
-            a.key=d.journal_name;
-          }
-          else if(payload.type === '4')
-          {
-            a.value=d.publisher_id;
-            a.key=d.publisher_name;
-          }
-          ddd[i]=a;
-        });
-        console.log(JSON.stringify(ddd));
-        yield put({type: 'setOptlist',payload:ddd});
+        yield put({type: 'setOptlist',payload:data});
       }
     },
     *queryUser({
@@ -119,12 +135,9 @@ export default {
     *logout({
       payload
     }, {call, put}) {
-      const data = yield call(logout, parse(payload))
-      if(data.success){
-        yield put({
-          type: 'logoutSuccess'
-        })
-      }
+      yield put({
+        type: 'logoutSuccess'
+      })
     },
     *switchSider({
       payload
@@ -243,5 +256,11 @@ export default {
         Optlist: action.payload,
       }
     },
+    setpasswordDirty(state,action){
+      return {
+        ...state,
+        passwordDirty: action.payload,
+      }
+    }
   }
 }

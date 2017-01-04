@@ -32,18 +32,6 @@ module.exports = [
     ]
   },
   {
-    key: 'ui',
-    name: 'UI组件',
-    icon: 'camera-o',
-    clickable:false,
-    child:[
-      {
-        key: 'ico',
-        name: '业务图标',
-      },
-    ]
-  },
-  {
     key: 'search',
     name: '搜索',
     icon: 'search',

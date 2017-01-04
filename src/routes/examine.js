@@ -6,12 +6,22 @@ import UserList from '../components/operation/examinepaperlist'
 
 function ExaminePaper({search,dispatch}) {
   const {
-    loading, _examinepaperlist, modalVisible, modalType,
+    loading, _examinepaperlist, user_id, modalVisible, modalType,
   } = search;
 
   const userListProps = {
     dataSource: _examinepaperlist,
     loading,
+    onItem(paperID,type) {
+      let a={};
+      a.editor_id=user_id;
+      a.paper_id=paperID;
+      a.type=type;
+      dispatch({
+        type: 'search/examinePaper',
+        payload: a,
+      })
+    },
   };
 
   const userSearchProps = {

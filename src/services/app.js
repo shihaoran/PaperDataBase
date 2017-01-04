@@ -39,8 +39,14 @@ export async function register(params) {
 }
 
 export async function getOpt(params) {
-  return request(params.url, {
+  return request(params, {
     method: 'post',
-    data:JSON.stringify(params.value),
+    data:"",
+  })
+}
+export async function getJournal(params) {
+  return request('getJournalList/', {
+    method: 'post',
+    data:JSON.stringify(params),
   })
 }

@@ -5,6 +5,7 @@ import styles from './list.less'
 function list({
   loading,
   dataSource,
+  onItem,
 }) {
   const columns = [
     {
@@ -53,10 +54,10 @@ function list({
       width: 100,
       render: (text, record) => (
         <p>
-          <a onClick={() => onEditItem(record)} style={{
-            marginRight: 4,
-          }}>通过</a>
-          <Popconfirm title="确定要退回吗？" onConfirm={() => onDeleteItem(record.id)}>
+          <Popconfirm title="确定要通过吗？" onConfirm={() => onItem(record.paper_id,"0")}>
+            <a style={{marginRight: 4,}}>通过</a>
+          </Popconfirm>
+          <Popconfirm title="确定要退回吗？" onConfirm={() => onItem(record.paper_id,"0")}>
             <a>不通过</a>
           </Popconfirm>
         </p>

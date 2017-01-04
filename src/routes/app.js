@@ -11,7 +11,7 @@ import {classnames} from '../utils'
 import '../components/layout/common.less'
 
 function App({children, location, dispatch, app}) {
-  const {login, loading, loginButtonLoading, user_name,user_type, siderFold, darkTheme, isNavbar, regmodal_visible,reg_type} = app;
+  const {login, loading, loginButtonLoading, user_name,user_type, siderFold, darkTheme, isNavbar, regmodal_visible,reg_type,Optlist} = app;
   const loginProps = {
     loading,
     loginButtonLoading,
@@ -21,6 +21,7 @@ function App({children, location, dispatch, app}) {
     dispatch,
     regmodal_visible,
     reg_type,
+    Optlist,
   };
 
   const headerProps = {
@@ -30,6 +31,7 @@ function App({children, location, dispatch, app}) {
     location,
     isNavbar,
     logout() {
+      console.log("logout");
       dispatch({type: 'app/logout'})
     },
     switchSider() {
