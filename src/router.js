@@ -31,6 +31,46 @@ export default function ({history, app}) {
             })
           }
         }, {
+          path: 'users/examine',
+          name: 'examine',
+          getComponent(nextState, cb) {
+            require.ensure([], require => {
+              cb(null, require('./routes/examine'))
+            })
+          }
+        },{
+          path: 'users/papers',
+          name: 'papers',
+          getComponent(nextState, cb) {
+            require.ensure([], require => {
+              cb(null, require('./routes/papers'))
+            })
+          }
+        },{
+          path: 'users/salary',
+          name: 'salary',
+          getComponent(nextState, cb) {
+            require.ensure([], require => {
+              cb(null, require('./routes/salary'))
+            })
+          }
+        },{
+          path: 'users/authors',
+          name: 'authors',
+          getComponent(nextState, cb) {
+            require.ensure([], require => {
+              cb(null, require('./routes/authors'))
+            })
+          }
+        },{
+          path: 'users/journals',
+          name: 'journals',
+          getComponent(nextState, cb) {
+            require.ensure([], require => {
+              cb(null, require('./routes/journals'))
+            })
+          }
+        },{
           path: 'ui/ico',
           name: 'ui/ico',
           getComponent(nextState, cb) {

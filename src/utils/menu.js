@@ -15,7 +15,7 @@ module.exports = [
       },
       {
         key: 'papers',
-        name: '发表论文',
+        name: '我的论文',
       },
       {
         key: 'salary',

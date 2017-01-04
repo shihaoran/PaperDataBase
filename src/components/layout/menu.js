@@ -4,11 +4,36 @@ import { Link } from 'dva/router'
 import styles from './main.less'
 import { menu } from '../../utils'
 
+var u_type="0";
 
 const topMenus = menu.map( item => item.key)
 const getMenus = function (menuArray,siderFold,parentPath) {
-  parentPath = parentPath || '/'
+  parentPath = parentPath || '/';
   return menuArray.map(item => {
+    /*if(item.key=="users"&&u_type=="0")
+    {
+      return;
+    }
+    if(item.key=="examine"&&u_type!="2")
+    {
+      return;
+    }
+    if(item.key=="papers"&&u_type!="1")
+    {
+      return;
+    }
+    if(item.key=="salary"&&u_type!="4")
+    {
+      return;
+    }
+    if(item.key=="authors"&&u_type!="3")
+    {
+      return;
+    }
+    if(item.key=="journals"&&u_type!="5")
+    {
+      return;
+    }*/
     if (!!item.child) {
       return (
         <Menu.SubMenu key={item.key} title={<span>{item.icon ? <Icon type={item.icon} /> : ''}{siderFold&&topMenus.indexOf(item.key)>=0 ? '' : item.name}</span>}>
@@ -26,10 +51,11 @@ const getMenus = function (menuArray,siderFold,parentPath) {
       )
     }
   })
-}
+};
 
 function Menus({ siderFold,darkTheme,location,isNavbar,user_type }) {
-  const menuItems = getMenus(menu,siderFold)
+  u_type=user_type;
+  const menuItems = getMenus(menu,siderFold);
   return (
   <Menu
     mode={siderFold?"vertical":"inline"}

@@ -152,8 +152,9 @@ export default {
   },
   reducers : {
     loginSuccess(state, action) {
-      let j_id="-1";
-      if(action.payload.type=='2')
+      let j_id="-2";
+      console.log(action.payload);
+      if(action.payload.user_type=='2')
         j_id=action.payload.journal_id;
       return {
         ...state,

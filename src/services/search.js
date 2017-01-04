@@ -31,17 +31,46 @@ export async function queryPublisher(params) {
     data:params,
   })
 }
-
-export async function create(params) {
-  return request('/api/users', {
+export async function getexaminePaper(params) {
+  return request('getExaminePaper/', {
+    method: 'post',
+    data:params,
+  })
+}
+export async function getmyPaper(params) {
+  return request('getPaperList/', {
+    method: 'post',
+    data:params,
+  })
+}
+export async function getAuthor(params) {
+  return request('getAuthorList/', {
+    method: 'post',
+    data:params,
+  })
+}
+export async function getEditor(params) {
+  return request('getEditorList/', {
+    method: 'post',
+    data:params,
+  })
+}
+export async function getJournal(params) {
+  return request('getJournalList/', {
+    method: 'post',
+    data:params,
+  })
+}
+export async function getField(params) {
+  return request('getFieldList/', {
     method: 'post',
     data:params,
   })
 }
 
-export async function remove(params) {
-  return request('/api/users', {
-    method: 'delete',
+export async function addPaper(params) {
+  return request('addPaper/', {
+    method: 'post',
     data:params,
   })
 }
