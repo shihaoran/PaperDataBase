@@ -65,6 +65,10 @@ export default {
           message: '注册成功',
           description: '注册成功，您可以使用数据库了！',
         });
+        if(payload.type=="2")
+        {
+          yield put({type: 'setuserjournalid', payload:payload.editor_journal_id});
+        }
       }
       else if(data.type=="1")
       {
@@ -182,7 +186,8 @@ export default {
     logoutSuccess(state){
       return {
         ...state,
-        login: false
+        login: false,
+        loading:false,
       }
     },
     loginFail(state) {
@@ -260,6 +265,12 @@ export default {
       return {
         ...state,
         passwordDirty: action.payload,
+      }
+    },
+    setuserjournalid(state,action){
+      return {
+        ...state,
+        user_journal_id: action.payload,
       }
     }
   }

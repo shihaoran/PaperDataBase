@@ -102,9 +102,10 @@ export default {
     *addPaper({ payload }, { call, put, select}) {
       yield put({ type: 'showLoading' });
       const data = yield call(addPaper, JSON.stringify(payload));
+      console.log(data);
       if (data) {
         yield put({
-          type: 'getexaminePaper',
+          type: 'getmyPaper',
         })
       }
       yield put({
@@ -138,7 +139,9 @@ export default {
     *getexaminePaper({ payload }, { call, put, select}) {
       yield put({ type: 'showLoading' });
       const app = yield select(state => state.app);
-      const a={"journal_id":app.user_journal_id};
+      let a={};
+      a.journal_id=app.user_journal_id;
+      console.log(a);
       const data = yield call(getexaminePaper, JSON.stringify(a));
       if (data) {
         let a={};

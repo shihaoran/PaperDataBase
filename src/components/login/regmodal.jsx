@@ -62,7 +62,7 @@ const modal = ({
         else if(reg_type === '2')
         {
           result.editor_name=values.nickname;
-          result.edit_journal_id=values.place_id;
+          result.editor_journal_id=values.place_id;
         }
         else if(reg_type === '3')
         {

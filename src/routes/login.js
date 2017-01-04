@@ -113,15 +113,11 @@ const login = ({
             登录
           </Button>
           <Dropdown overlay={menu}>
-            <Button size="large" type="ghost" loading={loginButtonLoading}>
+            <Button size="large" type="ghost" >
               注册 <Icon type="down" />
             </Button>
           </Dropdown>
         </Row>
-        <p>
-          <span>账号：guest</span>
-          <span>密码：guest</span>
-        </p>
       </form>
       <RegModal/>
     </div>

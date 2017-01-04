@@ -17,8 +17,8 @@ function list({
       key: 'paper_title',
     },{
       title: '作者',
-      dataIndex: 'paper_author',
-      key: 'paper_author',
+      dataIndex: 'author',
+      key: 'author',
     },{
       title: '出版时间',
       dataIndex: 'paper_published_year',

@@ -34,9 +34,14 @@ const modal = ({
         ...getFieldsValue(),
         paper_author_id:user_id,
       };
+      const strdata = {
+        ...data,
+        paper_published_year:data.paper_published_year.toString(),
+        paper_author_id:user_id,
+      };
       dispatch({
         type: 'search/addPaper',
-        payload: data,
+        payload: strdata,
       });
       dispatch({
         type: 'search/hideModal',
@@ -91,11 +96,10 @@ const modal = ({
             rules: [
               {
                 required: true,
-                type: 'number',
                 message: '发表年份未填写',
               },
             ],
-          })(<Input />)}
+          })(<InputNumber min={1900} max={2017} />)}
         </FormItem>
         <FormItem label="发表期刊：" hasFeedback {...formItemLayout}>
           {getFieldDecorator('paper_published_journal_id', {
