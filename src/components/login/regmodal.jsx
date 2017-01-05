@@ -83,7 +83,7 @@ const modal = ({
         {
           result.publisher_name=values.nickname;
           result.publisher_country=values.country;
-          result.publisher_center=values.address;
+          result.publisher_address=values.address;
         }
         console.log(result);
         dispatch({type: 'app/register', payload: result});
@@ -307,11 +307,11 @@ const modal = ({
               ],
             })(
               <Select placeholder="请选择机构性质">
-                <Option value="university">大学</Option>
-                <Option value="company">公司</Option>
-                <Option value="institute">科研院所</Option>
+                <Option value="School">大学</Option>
+                <Option value="Company">公司</Option>
+                <Option value="Scientific Research Institute">科研院所</Option>
               </Select>
-            )}
+            )}a
           </FormItem>
           :<div/>
         }

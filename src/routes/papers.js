@@ -3,6 +3,7 @@ import {connect} from 'dva'
 import UserSearch from '../components/operation/search'
 import UserList from '../components/operation/mypaperlist'
 import AddModal from '../components/operation/addpapermodal'
+import EditModal from '../components/operation/editpapermodal'
 
 
 function MyPaper({search,dispatch}) {
@@ -13,6 +14,15 @@ function MyPaper({search,dispatch}) {
   const userListProps = {
     dataSource: _examinepaperlist,
     loading,
+    onDeleteItem(item){
+      dispatch({
+        type: 'search/delPaper',
+        payload: {paper_id:item.paper_id},
+      })
+    },
+    onEditItem(item){
+      dispatch({type: 'search/showeditModal',payload:item,});
+    }
   };
 
   const userSearchProps = {
@@ -32,6 +42,7 @@ function MyPaper({search,dispatch}) {
       <UserSearch {...userSearchProps} />
       <UserList {...userListProps} />
       <AddModal/>
+      <EditModal/>
     </div>
   )
 }

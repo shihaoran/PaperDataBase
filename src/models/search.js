@@ -11,6 +11,8 @@ import { create,
   getJournal,
   getField,
   addPaper,
+  delPaper,
+  editPaper,
   setSalary,
   examinePaper,
   getDataBaseInfo,
@@ -37,7 +39,9 @@ export default {
     dashboard:{},
     currentItem: {},
     modalVisible: false,
+    editmodalVisible:false,
     modalType: 'create',
+    edititem:{},
   },
 
   subscriptions: {
@@ -102,6 +106,32 @@ export default {
     *addPaper({ payload }, { call, put, select}) {
       yield put({ type: 'showLoading' });
       const data = yield call(addPaper, JSON.stringify(payload));
+      console.log(data);
+      if (data) {
+        yield put({
+          type: 'getmyPaper',
+        })
+      }
+      yield put({
+        type: 'hideLoading',
+      })
+    },
+    *editPaper({ payload }, { call, put, select}) {
+      yield put({ type: 'showLoading' });
+      const data = yield call(editPaper, JSON.stringify(payload));
+      console.log(data);
+      if (data) {
+        yield put({
+          type: 'getmyPaper',
+        })
+      }
+      yield put({
+        type: 'hideLoading',
+      })
+    },
+    *delPaper({ payload }, { call, put, select}) {
+      yield put({ type: 'showLoading' });
+      const data = yield call(delPaper, JSON.stringify(payload));
       console.log(data);
       if (data) {
         yield put({
@@ -346,8 +376,11 @@ export default {
     showModal(state, action) {
       return { ...state, ...action.payload, modalVisible: true }
     },
+    showeditModal(state, action) {
+      return { ...state, edititem:action.payload, editmodalVisible: true }
+    },
     hideModal(state) {
-      return { ...state, modalVisible: false }
+      return { ...state, modalVisible: false ,editmodalVisible: false}
     },
     setCurItem(state,action){
       return { ...state, currentItem: action.payload }

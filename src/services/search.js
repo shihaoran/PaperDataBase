@@ -75,6 +75,20 @@ export async function addPaper(params) {
   })
 }
 
+export async function editPaper(params) {
+  return request('editPaper/', {
+    method: 'post',
+    data:params,
+  })
+}
+
+export async function delPaper(params) {
+  return request('deletePaper/', {
+    method: 'post',
+    data:params,
+  })
+}
+
 export async function setSalary(params) {
   return request('setSalary/', {
     method: 'post',

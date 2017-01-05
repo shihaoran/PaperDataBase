@@ -57,7 +57,7 @@ function list({
           <Popconfirm title="确定要通过吗？" onConfirm={() => onItem(record.paper_id,"0")}>
             <a style={{marginRight: 4,}}>通过</a>
           </Popconfirm>
-          <Popconfirm title="确定要退回吗？" onConfirm={() => onItem(record.paper_id,"0")}>
+          <Popconfirm title="确定要退回吗？" onConfirm={() => onItem(record.paper_id,"1")}>
             <a>不通过</a>
           </Popconfirm>
         </p>

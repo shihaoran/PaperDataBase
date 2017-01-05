@@ -42,6 +42,10 @@ export default {
       }
       else
       {
+        notification['warning']({
+          message: "登录失败",
+          description: '用户名不存在或密码错误！',
+        });
         yield put({type: 'loginFail', payload:data });
       }
     },
