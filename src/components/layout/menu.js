@@ -14,23 +14,23 @@ const getMenus = function (menuArray,siderFold,parentPath) {
     {
       return;
     }
-    if(item.key=="examine"&&u_type!="2")
+    if(item.key=="examine"&&u_type!="2"&&u_type!="6")
     {
       return;
     }
-    if(item.key=="papers"&&u_type!="1")
+    if(item.key=="papers"&&u_type!="1"&&u_type!="6")
     {
       return;
     }
-    if(item.key=="salary"&&u_type!="4")
+    if(item.key=="salary"&&u_type!="4"&&u_type!="6")
     {
       return;
     }
-    if(item.key=="authors"&&u_type!="3")
+    if(item.key=="authors"&&u_type!="3"&&u_type!="6")
     {
       return;
     }
-    if(item.key=="journals"&&u_type!="5")
+    if(item.key=="journals"&&u_type!="5"&&u_type!="6")
     {
       return;
     }
