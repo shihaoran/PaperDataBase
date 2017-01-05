@@ -1,23 +1,23 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'dva'
 import UserSearch from '../components/searchs/search'
-import UserList from '../components/operation/authorlist'
+import List from '../components/operation/userlist'
 
 
-function EditAuthors({search,dispatch}) {
+function UserList({search,dispatch}) {
   const {
-    loading, _authorlist, modalVisible, modalType,
+    loading, _userlist, modalVisible, modalType,
   } = search;
 
   const userListProps = {
-    dataSource: _authorlist,
+    dataSource: _userlist,
     loading,
   };
 
   const userSearchProps = {
     onSearch(fieldsValue) {
       dispatch({
-        type: 'search/getAuthor',
+        type: 'search/getUserList',
         payload: fieldsValue.keyword,
       })
     },
@@ -25,9 +25,9 @@ function EditAuthors({search,dispatch}) {
   return (
     <div className="content-inner">
       <UserSearch {...userSearchProps} />
-      <UserList {...userListProps} />
+      <List {...userListProps} />
     </div>
   )
 }
 
-export default connect(search => search)(EditAuthors)
+export default connect(search => search)(UserList)

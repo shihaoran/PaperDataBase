@@ -34,6 +34,10 @@ const getMenus = function (menuArray,siderFold,parentPath) {
     {
       return;
     }
+    if(item.key=="userlist"&&u_type!="6")
+    {
+      return;
+    }
     if (!!item.child) {
       return (
         <Menu.SubMenu key={item.key} title={<span>{item.icon ? <Icon type={item.icon} /> : ''}{siderFold&&topMenus.indexOf(item.key)>=0 ? '' : item.name}</span>}>

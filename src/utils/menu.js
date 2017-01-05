@@ -29,6 +29,10 @@ module.exports = [
         key: 'journals',
         name: '查看期刊',
       },
+      {
+        key: 'userlist',
+        name: '管理用户',
+      },
     ]
   },
   {

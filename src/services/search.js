@@ -43,6 +43,7 @@ export async function getmyPaper(params) {
     data:params,
   })
 }
+
 export async function getAuthor(params) {
   return request('getAuthorList/', {
     method: 'post',
@@ -63,6 +64,13 @@ export async function getJournal(params) {
 }
 export async function getField(params) {
   return request('getFieldList/', {
+    method: 'post',
+    data:params,
+  })
+}
+
+export async function getUserList(params) {
+  return request('getUserList/', {
     method: 'post',
     data:params,
   })

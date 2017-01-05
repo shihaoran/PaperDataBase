@@ -16,6 +16,7 @@ import { create,
   setSalary,
   examinePaper,
   getDataBaseInfo,
+  getUserList,
 } from '../services/search'
 import { parse } from 'qs'
 
@@ -35,6 +36,7 @@ export default {
     _journallist:[],
     _editorlist:[],
     _fieldlist:[],
+    _userlist:[],
     loading: false,
     dashboard:{},
     currentItem: {},
@@ -70,6 +72,11 @@ export default {
         else if (location.pathname === '/users/journals') {
           dispatch({
             type: 'getJournal',
+          })
+        }
+        else if (location.pathname === '/users/userlist') {
+          dispatch({
+            type: 'getUserList',
           })
         }
         else if (location.pathname === '/dashboard') {
@@ -186,8 +193,17 @@ export default {
     *getmyPaper({ payload }, { call, put, select}) {
       yield put({ type: 'showLoading' });
       const app = yield select(state => state.app);
-      const a={"author_id":app.user_id};
-      const data = yield call(getmyPaper, JSON.stringify(a));
+      let k_search={};
+      if(payload)
+      {
+        k_search={"author_id":app.user_id,"keyword":payload};
+        console.log(k_search);
+      }
+      else
+      {
+        k_search={"author_id":app.user_id,"keyword":""};
+      }
+      const data = yield call(getmyPaper, JSON.stringify(k_search));
       if (data) {
         let a={};
         a.type="1";
@@ -201,8 +217,17 @@ export default {
     *getAuthor({ payload }, { call, put, select}) {
       yield put({ type: 'showLoading' });
       const app = yield select(state => state.app);
-      const a={"agency_id":app.user_id};
-      const data = yield call(getAuthor, JSON.stringify(a));
+      let k_search={};
+      if(payload)
+      {
+        k_search={"agency_id":app.user_id,"keyword":payload};
+        console.log(k_search);
+      }
+      else
+      {
+        k_search={"agency_id":app.user_id,"keyword":""};
+      }
+      const data = yield call(getAuthor, JSON.stringify(k_search));
       if (data) {
         let a={};
         a.type="2";
@@ -216,11 +241,42 @@ export default {
     *getEditor({ payload }, { call, put, select}) {
       yield put({ type: 'showLoading' });
       const app = yield select(state => state.app);
-      const a={"journal_id":app.user_id};
-      const data = yield call(getEditor, JSON.stringify(a));
+      let k_search={};
+      if(payload)
+      {
+        k_search={"journal_id":app.user_id,"keyword":payload};
+        console.log(k_search);
+      }
+      else
+      {
+        k_search={"journal_id":app.user_id,"keyword":""};
+      }
+      const data = yield call(getEditor, JSON.stringify(k_search));
       if (data) {
         let a={};
         a.type="3";
+        a.data=data;
+        yield put({
+          type: 'getSuccess',
+          payload: a,
+        })
+      }
+    },
+    *getUserList({ payload }, { call, put, select}) {
+      yield put({ type: 'showLoading' });
+      let k_search={};
+      if(payload)
+      {
+        k_search={"keyword":payload};
+      }
+      else
+      {
+        k_search={"keyword":""};
+      }
+      const data = yield call(getUserList, JSON.stringify(k_search));
+      if (data) {
+        let a={};
+        a.type="6";
         a.data=data;
         yield put({
           type: 'getSuccess',
@@ -372,6 +428,8 @@ export default {
         return { ...state, _journallist:action.payload.data, loading: false };
       else if(action.payload.type=="5")
         return { ...state, _fieldlist:action.payload.data, loading: false };
+      else if(action.payload.type=="6")
+        return { ...state, _userlist:action.payload.data, loading: false };
     },
     showModal(state, action) {
       return { ...state, ...action.payload, modalVisible: true }

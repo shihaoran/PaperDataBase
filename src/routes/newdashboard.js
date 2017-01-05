@@ -32,7 +32,7 @@ function Dashboard({search,dispatch}) {
         <NumberCard icon="file-text"
                     color={color.green}
                     title="论文"
-                    number={dashboard.papaer_num}
+                    number={dashboard.paper_num}
         />
       </Col>
       <Col span={8}>

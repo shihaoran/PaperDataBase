@@ -26,6 +26,7 @@ function EditSalary({search,dispatch}) {
     onSearch(fieldsValue) {
       dispatch({
         type: 'search/getEditor',
+        payload:fieldsValue.keyword,
       })
     },
   };

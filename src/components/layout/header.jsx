@@ -42,7 +42,8 @@ function Header({user_name,user_type, logout, switchSider, siderFold, isNavbar ,
               user_type==="1"?"作者用户":
                 user_type==="2"?"编辑用户":
                   user_type==="3"?"科研机构用户":
-                    user_type==="4"?"期刊用户":"出版社用户"}
+                    user_type==="4"?"期刊用户":
+                      user_type==="5"?"出版社用户":"管理员用户"}
           </Menu.Item>
           <Menu.Item key="logout" >
             <a>注销</a>

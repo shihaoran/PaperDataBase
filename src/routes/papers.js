@@ -33,7 +33,7 @@ function MyPaper({search,dispatch}) {
     onSearch(fieldsValue) {
       dispatch({
         type: 'search/getmyPaper',
-        payload: fieldsValue,
+        payload: fieldsValue.keyword,
       })
     },
   };

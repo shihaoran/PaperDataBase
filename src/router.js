@@ -71,6 +71,14 @@ export default function ({history, app}) {
             })
           }
         },{
+          path: 'users/userlist',
+          name: 'userlist',
+          getComponent(nextState, cb) {
+            require.ensure([], require => {
+              cb(null, require('./routes/userlist'))
+            })
+          }
+        },{
           path: 'ui/ico',
           name: 'ui/ico',
           getComponent(nextState, cb) {
